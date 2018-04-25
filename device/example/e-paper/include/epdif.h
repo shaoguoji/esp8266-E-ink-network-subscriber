@@ -28,22 +28,22 @@
 #ifndef EPDIF_H
 #define EPDIF_H
 
-#include "epaper.h"
+// #include "stm32f1xx_hal.h"
 
 // Pin definition
-#define CS_PIN           EPAPER_CS_PIN
-#define RST_PIN          EPAPER_RST_PIN
-#define DC_PIN           EPAPER_DC_PIN
-#define BUSY_PIN         EPAPER_BUSY_PIN
+#define CS_PIN           0
+#define RST_PIN          1
+#define DC_PIN           2
+#define BUSY_PIN         3
 
 // Pin level definition
 #define LOW             0
 #define HIGH            1
 
-// typedef struct {
+typedef struct {
   // GPIO_TypeDef* port;
-  // int pin;
-// } EPD_Pin;
+  int pin;
+} EPD_Pin;
 
 int  EpdInitCallback(void);
 void EpdDigitalWriteCallback(int pin, int value);

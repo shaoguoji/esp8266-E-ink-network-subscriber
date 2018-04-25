@@ -24,7 +24,7 @@
  * THE SOFTWARE.
  */
 
-#include "bsp/epdpaint.h"
+#include "epdpaint.h"
 
 
 void Paint_Init(Paint* paint, unsigned char* image, int width, int height) {
@@ -39,9 +39,8 @@ void Paint_Init(Paint* paint, unsigned char* image, int width, int height) {
  *  @brief: clear the image
  */
 void Paint_Clear(Paint* paint, int colored) {
-	int x, y;
-    for (x = 0; x < paint->width; x++) {
-        for (y = 0; y < paint->height; y++) {
+    for (int x = 0; x < paint->width; x++) {
+        for (int y = 0; y < paint->height; y++) {
             Paint_DrawAbsolutePixel(paint, x, y, colored);
         }
     }

@@ -10,9 +10,9 @@
  /opt/xtensa-lx106-elf/lib/gcc/xtensa-lx106-elf/4.8.2/include/sys/_types.h \
  /opt/xtensa-lx106-elf/lib/gcc/xtensa-lx106-elf/4.8.2/include/sys/lock.h \
  /opt/xtensa-lx106-elf/lib/gcc/xtensa-lx106-elf/4.8.2/include/machine/stdlib.h \
- /opt/xtensa-lx106-elf/lib/gcc/xtensa-lx106-elf/4.8.2/include/alloca.h \
- ../include/bsp/epd2in9.h ../include/fonts.h \
+ ../include/epd2in9.h ../include/fonts.h \
  /opt/xtensa-lx106-elf/lib/gcc/xtensa-lx106-elf/4.8.2/include/stdint.h \
- ../include/bsp/epdif.h ../include/epaper.h ../../include/os_type.h \
- ../../include/ets_sys.h ../../include/c_types.h \
- ../../include/eagle_soc.h
+ ../include/epdif.h ../../include/user_interface.h \
+ ../../include/os_type.h ../../include/ets_sys.h ../../include/c_types.h \
+ ../../include/eagle_soc.h ../../include/ip_addr.h ../../include/queue.h \
+ ../include/user_config.h ../../include/spi_flash.h ../../include/gpio.h

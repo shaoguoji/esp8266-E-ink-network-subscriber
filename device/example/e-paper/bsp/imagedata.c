@@ -23,7 +23,7 @@
  * THE SOFTWARE.
  */
 
- #include "bsp/imagedata.h"
+ #include "imagedata.h"
  
  const unsigned char IMAGE_DATA[] = {
  /* 0X00,0X01,0X80,0X00,0X28,0X01, */

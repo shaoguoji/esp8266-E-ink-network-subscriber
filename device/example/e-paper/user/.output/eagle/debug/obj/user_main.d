@@ -13,11 +13,8 @@
  ../../include/os_type.h ../../include/ets_sys.h ../include/user_config.h \
  ../../include/user_interface.h ../../include/ip_addr.h \
  ../../include/queue.h ../../include/spi_flash.h ../../include/gpio.h \
- ../include/driver/spi.h ../../include/os_type.h ../../include/gpio.h \
- ../include/epaper.h ../include/bsp/epd2in9.h ../include/fonts.h \
+ ../include/spi.h ../../include/os_type.h ../include/main.h \
+ ../../include/gpio.h ../include/epd2in9.h ../include/fonts.h \
  /opt/xtensa-lx106-elf/lib/gcc/xtensa-lx106-elf/4.8.2/include/stdint.h \
- ../include/bsp/epdif.h ../include/bsp/epdpaint.h \
- ../include/bsp/imagedata.h ../../include/mem.h \
- /opt/xtensa-lx106-elf/lib/gcc/xtensa-lx106-elf/4.8.2/include/stdlib.h \
- /opt/xtensa-lx106-elf/lib/gcc/xtensa-lx106-elf/4.8.2/include/machine/stdlib.h \
- /opt/xtensa-lx106-elf/lib/gcc/xtensa-lx106-elf/4.8.2/include/alloca.h
+ ../include/epdif.h ../include/epdpaint.h ../include/imagedata.h \
+ ../../include/mem.h

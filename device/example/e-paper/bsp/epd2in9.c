@@ -25,8 +25,9 @@
  */
 
 #include <stdlib.h>
-#include "bsp/epd2in9.h"
-#include "bsp/epdif.h"
+#include "epd2in9.h"
+#include "epdif.h"
+#include "user_interface.h"
 
 int EPD_Init(EPD* epd, const unsigned char* lut) {
   epd->reset_pin = RST_PIN;
@@ -139,8 +140,7 @@ void EPD_SetFrameMemory(
 ) {
   int x_end;
   int y_end;
-  int i, j;
-  
+
   if (
     image_buffer == NULL ||
     x < 0 || image_width < 0 ||
@@ -165,8 +165,8 @@ void EPD_SetFrameMemory(
   EPD_SetMemoryPointer(epd, x, y);
   EPD_SendCommand(epd, WRITE_RAM);
   /* send the image data */
-  for (j = 0; j < y_end - y + 1; j++) {
-    for (i = 0; i < (x_end - x + 1) / 8; i++) {
+  for (int j = 0; j < y_end - y + 1; j++) {
+    for (int i = 0; i < (x_end - x + 1) / 8; i++) {
       EPD_SendData(epd, image_buffer[i + j * (image_width / 8)]);
     }
   }
@@ -177,12 +177,11 @@ void EPD_SetFrameMemory(
 *          this won't update the display.
 */
 void EPD_ClearFrameMemory(EPD* epd, unsigned char color) {
-  int i;
   EPD_SetMemoryArea(epd, 0, 0, epd->width - 1, epd->height - 1);
   EPD_SetMemoryPointer(epd, 0, 0);
   EPD_SendCommand(epd, WRITE_RAM);
   /* send the color data */
-  for (i = 0; i < epd->width / 8 * epd->height; i++) {
+  for (int i = 0; i < epd->width / 8 * epd->height; i++) {
     EPD_SendData(epd, color);
   }
 }
@@ -217,11 +216,10 @@ void EPD_Sleep(EPD* epd) {
  *  @brief: set the look-up tables
  */
 static void EPD_SetLut(EPD* epd, const unsigned char* lut) {
-  int i;
   epd->lut = lut;
   EPD_SendCommand(epd, WRITE_LUT_REGISTER);
   /* the length of look-up table is 30 bytes */
-  for (i = 0; i < 30; i++) {
+  for (int i = 0; i < 30; i++) {
     EPD_SendData(epd, epd->lut[i]);
   } 
 }

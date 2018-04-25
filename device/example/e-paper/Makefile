@@ -24,21 +24,21 @@ SPECIAL_MKTARGETS=$(APP_MKTARGETS)
 SUBDIRS=    \
 	user    \
 	driver  \
-	bsp     \
-	fonts
+	BSP     \
+	Fonts
 
 endif # } PDIR
 
 APPDIR = .
 LDDIR = ../ld
 
-CCFLAGS += -Os
+CCFLAGS += -Os -std=c99
 
-TARGET_LDFLAGS =        \
-    -nostdlib       \
-    -Wl,-EL \
-    --longcalls \
-    --text-section-literals
+TARGET_LDFLAGS =		\
+	-nostdlib		\
+	-Wl,-EL \
+	--longcalls \
+	--text-section-literals
 
 ifeq ($(FLAVOR),debug)
     TARGET_LDFLAGS += -g -O2
@@ -50,32 +50,36 @@ endif
 
 COMPONENTS_eagle.app.v6 = \
 	user/libuser.a  \
-	driver/libdriver.a  \
-	bsp/libbsp.a  \
-	fonts/libfonts.a
+	driver/libdriver.a \
+	BSP/libbsp.a \
+	Fonts/libfonts.a
 
 LINKFLAGS_eagle.app.v6 = \
-    -L../lib        \
-    -nostdlib   \
+	-L../lib        \
+	-nostdlib	\
     -T$(LD_FILE)   \
-    -Wl,--no-check-sections \
-    -Wl,--gc-sections	\
-    -u call_user_start  \
-    -Wl,-static                     \
-    -Wl,--start-group                   \
-    -lc                 \
-    -lgcc                   \
-    -lhal                   \
-    -lphy   \
-    -lpp    \
-    -lnet80211  \
-    -llwip  \
-    -lwpa   \
-    -lcrypto    \
-    -lmain  \
-    -ldriver	\
-    $(DEP_LIBS_eagle.app.v6)                    \
-    -Wl,--end-group
+	-Wl,--no-check-sections	\
+	-Wl,--gc-sections	\
+    -u call_user_start	\
+	-Wl,-static						\
+	-Wl,--start-group					\
+	-lc					\
+	-lgcc					\
+	-lhal					\
+	-lphy	\
+	-lpp	\
+	-lnet80211	\
+	-llwip	\
+	-lwpa	\
+	-lcrypto	\
+	-lmain	\
+	-ljson	\
+	-lupgrade\
+	-lssl	\
+	-lpwm	\
+	-lsmartconfig \
+	$(DEP_LIBS_eagle.app.v6)					\
+	-Wl,--end-group
 
 DEPENDS_eagle.app.v6 = \
                 $(LD_FILE) \
@@ -89,21 +93,21 @@ DEPENDS_eagle.app.v6 = \
 #   for a subtree within the makefile rooted therein
 #
 
-#UNIVERSAL_TARGET_DEFINES =     \
+#UNIVERSAL_TARGET_DEFINES =		\
 
 # Other potential configuration flags include:
-#   -DTXRX_TXBUF_DEBUG
-#   -DTXRX_RXBUF_DEBUG
-#   -DWLAN_CONFIG_CCX
-CONFIGURATION_DEFINES = -DICACHE_FLASH
+#	-DTXRX_TXBUF_DEBUG
+#	-DTXRX_RXBUF_DEBUG
+#	-DWLAN_CONFIG_CCX
+CONFIGURATION_DEFINES =	-DICACHE_FLASH
 
-DEFINES +=              \
-    $(UNIVERSAL_TARGET_DEFINES) \
-    $(CONFIGURATION_DEFINES)
+DEFINES +=				\
+	$(UNIVERSAL_TARGET_DEFINES)	\
+	$(CONFIGURATION_DEFINES)
 
-DDEFINES +=             \
-    $(UNIVERSAL_TARGET_DEFINES) \
-    $(CONFIGURATION_DEFINES)
+DDEFINES +=				\
+	$(UNIVERSAL_TARGET_DEFINES)	\
+	$(CONFIGURATION_DEFINES)
 
 
 #############################################################
