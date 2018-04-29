@@ -1,0 +1,8 @@
+{
+    "files.associations": {
+        "display.h": "c",
+        "imagedata.h": "c",
+        "epdif.h": "c",
+        "epdpaint.h": "c"
+    }
+}
