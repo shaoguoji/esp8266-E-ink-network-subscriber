@@ -4,5 +4,6 @@
         "imagedata.h": "c",
         "epdif.h": "c",
         "epdpaint.h": "c"
-    }
+    },
+    "aliosStudio.sdkPath": "C:\\Users\\Guoji\\.aos\\AliOS-Things"
 }

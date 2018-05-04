@@ -27,6 +27,11 @@
 #include "user_interface.h"
 
 #include "display.h"
+#include "data_handle.h"
+
+#include <string.h>
+
+#define DEVICE_ID   "D446"
 
 /******************************************************************************
  * FunctionName : user_rf_cal_sector_set
@@ -102,12 +107,8 @@ user_rf_pre_init(void)
 {
 }
 
-Github_Type githubData = {
-    "alibaba/AliOS-Things",
-    "223",
-    "1134",
-    "406"
-};
+Data_Type data;
+Data_Type config;
 
 /******************************************************************************
  * FunctionName : user_init
@@ -127,11 +128,20 @@ user_init(void)
     // EPD_DelayMs(&epd, 2000);
     // Display_Weather();
     // EPD_DelayMs(&epd, 2000);
-    Display_Github(&githubData);
+    // Display_Github(&githubData);
     // EPD_DelayMs(&epd, 2000);
     // Display_Fund();
+    
+    char *data_text = "{\"device_id\":\"D446\",\"data_type\":2,\"data_content\":{\"repo_name\":\"alibaba/AliOS-Things\",\"watch\":\"222\",\"star\":\"1147\",\"fork\":\"410\"}}";
+    char *config_text = "{\"device_id\":\"D446\",\"data_type\":0,\"data_content\":{\"style\":\"light\",\"font_size\":1}}";
 
+    data_parse(data_text, &data);
+    config_parse(config_text, &config);
 
+    if (strcmp(data.device_id, DEVICE_ID) == 0) {
+        Display_Reflesh(&data, &config);
+    }
+    
     // time_start_ms = system_get_time()/1000;
 
     // os_timer_disarm(&count_timer);

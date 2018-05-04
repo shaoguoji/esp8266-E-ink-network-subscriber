@@ -3,13 +3,14 @@
 #include "ets_sys.h"
 #include "osapi.h"
 #include "user_interface.h"
+#include "mem.h"
 
 #include "spi.h"
 #include "epd2in9.h"
 #include "epdif.h"
 #include "epdpaint.h"
 #include "imagedata.h"
-#include "mem.h"
+#include "data_handle.h"
 
 #include <string.h>
 
@@ -50,7 +51,7 @@ void ICACHE_FLASH_ATTR Display_Welcome(void)
     EPD_DisplayFrame(&epd);
 }
 
-void ICACHE_FLASH_ATTR Display_Weather(void)
+void ICACHE_FLASH_ATTR Display_Weather(Weather_Type* data, Config_Type* conf)
 {
     EPD_SetFrameMemory(&epd, IMAGE_WEATHER_DATA, 0, 0, epd.width, epd.height);
     EPD_DisplayFrame(&epd);
@@ -58,30 +59,57 @@ void ICACHE_FLASH_ATTR Display_Weather(void)
     EPD_DisplayFrame(&epd);
 }
 
-void ICACHE_FLASH_ATTR Display_Github(Github_Type* data)
+void ICACHE_FLASH_ATTR Display_Github(Github_Type* data, Config_Type* conf)
 {
+    /* fontsize table */
+    sFONT* sizeConfig[2][3] = {
+        {&Font12, &Font16, &Font24},   // fontsize of repo name
+        {&Font12, &Font16, &Font20}    // fontsize of watch star and fork
+    }; 
+
     os_memcpy(frame_buffer, IMAGE_GITHUB_DATA, EPD_WIDTH * EPD_HEIGHT / 8);
 
     Paint_SetRotate(&paint, ROTATE_90);
 
-    Display_Muti_Line_String(&paint, data->repoName, 80, 5, 210, 60, &Font20);
-    Display_Muti_Line_String(&paint, data->watch, 35, 81, 60, 30, &Font16);
-    Display_Muti_Line_String(&paint, data->star, 130, 81, 60, 30, &Font16);
-    Display_Muti_Line_String(&paint, data->fork, 225, 81, 60, 30, &Font16);
+    Display_Muti_Line_String(&paint, data->repo_name, 80, 5, 210, 60, sizeConfig[0][conf->font_size]);
+    Display_Muti_Line_String(&paint, data->watch, 35, 81, 60, 30, sizeConfig[1][conf->font_size]);
+    Display_Muti_Line_String(&paint, data->star, 130, 81, 60, 30, sizeConfig[1][conf->font_size]);
+    Display_Muti_Line_String(&paint, data->fork, 225, 81, 60, 30, sizeConfig[1][conf->font_size]);
 
-    // Display_Reverse(&paint);
+    if (strcmp(conf->style, "dark") == 0) {
+        Display_Reverse(&paint);
+    }
+
     EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, epd.width, epd.height);
     EPD_DisplayFrame(&epd);
     EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, epd.width, epd.height);
     EPD_DisplayFrame(&epd);
 }
 
-void ICACHE_FLASH_ATTR Display_Fund(void)
+void ICACHE_FLASH_ATTR Display_Fund(Fund_Type* data, Config_Type* conf)
 {
     EPD_SetFrameMemory(&epd, IMAGE_FUND_DATA, 0, 0, epd.width, epd.height);
     EPD_DisplayFrame(&epd);
     EPD_SetFrameMemory(&epd, IMAGE_FUND_DATA, 0, 0, epd.width, epd.height);
     EPD_DisplayFrame(&epd);
+}
+
+void ICACHE_FLASH_ATTR Display_Reflesh(Data_Type* data, Data_Type* conf)
+{
+    switch (data->data_type)
+    {
+    case WEATHER_DATA:
+        Display_Weather((Weather_Type*)data->data_content, (Config_Type*)conf->data_content);
+        break;
+    case GITHUB_DATA:
+        Display_Github((Github_Type*)data->data_content, (Config_Type*)conf->data_content);
+        break;
+    case FUND_DATA:
+        Display_Fund((Fund_Type*)data->data_content, (Config_Type*)conf->data_content);
+        break;
+    default:
+        break;
+    }
 }
 
 void ICACHE_FLASH_ATTR Display_Muti_Line_String(Paint* myPaint, const char* text, 
@@ -93,12 +121,6 @@ void ICACHE_FLASH_ATTR Display_Muti_Line_String(Paint* myPaint, const char* text
     int textLine = strlen(text)/lineLength+(strlen(text)%lineLength != 0);
     char str[60];
     int i = 0;
-
-    /* fontsize table */
-    sFONT* sizeConfig[2][3] = {
-        {&Font12, &Font20, &Font24},   // fontsize of repo name
-        {&Font12, &Font16, &Font20}    // fontsize of watch star and fork
-    }; 
 
     if (DEBUG) {
         Paint_DrawFilledRectangle(&paint, x, y, x+width, y+heigh, COLORED);

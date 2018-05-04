@@ -1,0 +1,18 @@
+{
+  "name": "node_crawler",
+  "version": "1.0.0",
+  "description": "crawl data test",
+  "main": "weather.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "shaoguoji",
+  "license": "ISC",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.2",
+    "http": "0.0.0",
+    "https": "^1.0.0",
+    "iconv-lite": "^0.4.21",
+    "node-pinyin": "^0.2.3"
+  }
+}
