@@ -49,6 +49,8 @@ void Display_Muti_Line_String(Paint* paint, const char* text, int x, int y, int 
 void Display_Reverse(Paint* paint);
 
 void Display_Reflesh(Data_Type* data, Data_Type* conf);
+void Display_HorizontalLine(Paint* paint, int x, int y, int line_width, int size);
+void Display_VerticalLine(Paint* paint, int x, int y, int line_height, int size);
 
 
 #endif /* #ifndef __DISPLAY_H__ */

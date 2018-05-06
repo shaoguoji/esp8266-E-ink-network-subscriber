@@ -132,15 +132,41 @@ user_init(void)
     // EPD_DelayMs(&epd, 2000);
     // Display_Fund();
     
-    char *data_text = "{\"device_id\":\"D446\",\"data_type\":2,\"data_content\":{\"repo_name\":\"alibaba/AliOS-Things\",\"watch\":\"222\",\"star\":\"1147\",\"fork\":\"410\"}}";
+    char *data_text = "";
+    //char *data_text = "{\"device_id\":\"D446\",\"data_type\":2,\"data_content\":{\"repo_name\":\"alibaba/AliOS-Things\",\"watch\":\"222\",\"star\":\"1147\",\"fork\":\"410\"}}";
+    //char *data_text = "";
     char *config_text = "{\"device_id\":\"D446\",\"data_type\":0,\"data_content\":{\"style\":\"light\",\"font_size\":1}}";
+
+    Weather_Type wdata = {
+        "Guangzhou", 
+        "20180504", "21.0-25.0C", "PM25:63.0", 
+        "TOMORROW", "22.0-27.0C", "aqi:77.0"
+    };
+
+    Github_Type gdata = {
+        "alibaba/AliOS-Things", 
+        "222", "1147", "410"
+    };
+
+    Fund_Type fdata = {
+        "164906", 
+        "1.3350", "-1.84%", "2018-04-25",
+        "1.3454", "+0.78%", "2018-04-27"
+    };
+
 
     data_parse(data_text, &data);
     config_parse(config_text, &config);
 
-    if (strcmp(data.device_id, DEVICE_ID) == 0) {
-        Display_Reflesh(&data, &config);
-    }
+    Display_Welcome();
+    Display_Weather(&wdata, (Config_Type*)config.data_content);
+    Display_Fund(&fdata, (Config_Type*)config.data_content);
+    Display_Github(&gdata, (Config_Type*)config.data_content);
+
+
+    // if (strcmp(data.device_id, DEVICE_ID) == 0) {
+    //     Display_Reflesh(&data, &config);
+    // }
     
     // time_start_ms = system_get_time()/1000;
 

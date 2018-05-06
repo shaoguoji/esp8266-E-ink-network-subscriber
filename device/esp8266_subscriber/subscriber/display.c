@@ -45,32 +45,81 @@ void ICACHE_FLASH_ATTR Display_Init(void)
 
 void ICACHE_FLASH_ATTR Display_Welcome(void)
 {
-    EPD_SetFrameMemory(&epd, IMAGE_WELCOME_DATA, 0, 0, epd.width, epd.height);
+    Paint_Clear(&paint, UNCOLORED);
+    os_memcpy(frame_buffer, IMAGE_WELCOME_DATA, 1520);
+    Paint_SetRotate(&paint, ROTATE_90);
+
+    Paint_DrawStringAt(&paint, 115, 25, "--- Welcome ---", &Font16, COLORED);
+    Paint_DrawStringAt(&paint, 175, 60, "ESP8266", &Font24, COLORED);
+    Paint_DrawStringAt(&paint, 98, 87, "Network Subscriber", &Font16, COLORED);
+    Paint_DrawStringAt(&paint, 198, 115, "--By shaoguoji", &Font12, COLORED);
+
+    EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, epd.width, epd.height);
     EPD_DisplayFrame(&epd);
-    EPD_SetFrameMemory(&epd, IMAGE_WELCOME_DATA, 0, 0, epd.width, epd.height);
+    EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, epd.width, epd.height);
     EPD_DisplayFrame(&epd);
 }
 
 void ICACHE_FLASH_ATTR Display_Weather(Weather_Type* data, Config_Type* conf)
 {
-    EPD_SetFrameMemory(&epd, IMAGE_WEATHER_DATA, 0, 0, epd.width, epd.height);
+    /* fontsize table */
+    sFONT* sizeConfig[][3] = {
+        {&Font12, &Font16, &Font24},   // fontsize of city
+        {&Font8, &Font12, &Font16}     // fontsize of date, tempertrue and air
+    }; 
+
+    Paint_Clear(&paint, UNCOLORED);
+
+    /* copy icon data */
+    os_memcpy(frame_buffer, IMAGE_WEATHER_DATA, 1120);
+    Paint_SetRotate(&paint, ROTATE_90);
+    /* border line */
+    Display_HorizontalLine(&paint, 0, 1, 296, 4);
+    Display_HorizontalLine(&paint, 0, 125, 296, 4);
+    Display_VerticalLine(&paint, 0, 0, 128, 4);
+    Display_VerticalLine(&paint, 292, 0, 128, 4);
+    /* table line */
+    Display_HorizontalLine(&paint, 72, 38, 224, 2);
+    Display_HorizontalLine(&paint, 0, 64, 296, 2);
+    Display_HorizontalLine(&paint, 0, 95, 296, 2);
+    Display_VerticalLine(&paint, 72, 1, 128, 2);
+    Display_VerticalLine(&paint, 183, 38, 91, 2);
+    /* title text */
+    Display_Muti_Line_String(&paint, "TEMP", 5, 67, 65, 25, sizeConfig[1][conf->font_size]);
+    Display_Muti_Line_String(&paint, "AIR", 5, 98, 65, 25, sizeConfig[1][conf->font_size]);
+    /* data text */
+    Display_Muti_Line_String(&paint, data->city, 76, 6, 210, 30, sizeConfig[0][conf->font_size]);
+    Display_Muti_Line_String(&paint, data->today_date, 76, 40, 105, 25, sizeConfig[1][conf->font_size]);
+    Display_Muti_Line_String(&paint, data->tomorrow_date, 187, 40, 102, 25, sizeConfig[1][conf->font_size]);
+    Display_Muti_Line_String(&paint, data->today_temp, 76, 68, 105, 25, sizeConfig[1][conf->font_size]);
+    Display_Muti_Line_String(&paint, data->tomorrow_temp, 187, 68, 102, 25, sizeConfig[1][conf->font_size]);
+    Display_Muti_Line_String(&paint, data->today_air, 76, 98, 105, 25, sizeConfig[1][conf->font_size]);
+    Display_Muti_Line_String(&paint, data->tomorrow_air, 187, 98, 102, 25, sizeConfig[1][conf->font_size]);
+
+    if (strcmp(conf->style, "dark") == 0) {
+        Display_Reverse(&paint);
+    }
+
+    EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, epd.width, epd.height);
     EPD_DisplayFrame(&epd);
-    EPD_SetFrameMemory(&epd, IMAGE_WEATHER_DATA, 0, 0, epd.width, epd.height);
+    EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, epd.width, epd.height);
     EPD_DisplayFrame(&epd);
 }
 
 void ICACHE_FLASH_ATTR Display_Github(Github_Type* data, Config_Type* conf)
 {
     /* fontsize table */
-    sFONT* sizeConfig[2][3] = {
+    sFONT* sizeConfig[][3] = {
         {&Font12, &Font16, &Font24},   // fontsize of repo name
         {&Font12, &Font16, &Font20}    // fontsize of watch star and fork
     }; 
 
+    Paint_Clear(&paint, UNCOLORED);
+
+    /* copy icon data */
     os_memcpy(frame_buffer, IMAGE_GITHUB_DATA, EPD_WIDTH * EPD_HEIGHT / 8);
-
     Paint_SetRotate(&paint, ROTATE_90);
-
+    /* data text */
     Display_Muti_Line_String(&paint, data->repo_name, 80, 5, 210, 60, sizeConfig[0][conf->font_size]);
     Display_Muti_Line_String(&paint, data->watch, 35, 81, 60, 30, sizeConfig[1][conf->font_size]);
     Display_Muti_Line_String(&paint, data->star, 130, 81, 60, 30, sizeConfig[1][conf->font_size]);
@@ -88,9 +137,45 @@ void ICACHE_FLASH_ATTR Display_Github(Github_Type* data, Config_Type* conf)
 
 void ICACHE_FLASH_ATTR Display_Fund(Fund_Type* data, Config_Type* conf)
 {
-    EPD_SetFrameMemory(&epd, IMAGE_FUND_DATA, 0, 0, epd.width, epd.height);
+    /* fontsize table */
+    sFONT* sizeConfig[][3] = {
+        {&Font16, &Font20, &Font24},   // fontsize of worth
+        {&Font8, &Font12, &Font16},    // fontsize of date and num
+        {&Font12, &Font16, &Font16}     // fontsize of limit and tile
+    }; 
+    
+    Paint_Clear(&paint, UNCOLORED);
+    
+    /* copy icon data */
+    os_memcpy(frame_buffer, IMAGE_FUND_DATA, 1120);
+    Paint_SetRotate(&paint, ROTATE_90);
+    /* border line */
+    Display_HorizontalLine(&paint, 0, 1, 296, 4);
+    Display_HorizontalLine(&paint, 0, 125, 296, 4);
+    Display_VerticalLine(&paint, 0, 0, 128, 4);
+    Display_VerticalLine(&paint, 292, 0, 128, 4);
+    /* table line */
+    Display_HorizontalLine(&paint, 72, 38, 224, 2);
+    Display_HorizontalLine(&paint, 0, 64, 73, 2);
+    Display_HorizontalLine(&paint, 0, 95, 296, 2);
+    Display_VerticalLine(&paint, 72, 1, 128, 2);
+    Display_VerticalLine(&paint, 183, 1, 128, 2);
+    /* title text */
+    Display_Muti_Line_String(&paint, "Net Worth", 75, 6, 105, 30, sizeConfig[2][conf->font_size]);
+    Display_Muti_Line_String(&paint, "Forecast", 187, 6, 105, 30, sizeConfig[2][conf->font_size]);
+    Display_Muti_Line_String(&paint, "Date", 5, 98, 65, 25, sizeConfig[2][conf->font_size]);
+    /* data text */
+    Display_Muti_Line_String(&paint, data->num, 4, 67, 66, 25, sizeConfig[2][conf->font_size]);
+    Display_Muti_Line_String(&paint, data->now_worth, 75, 40, 105, 35, sizeConfig[0][conf->font_size]);
+    Display_Muti_Line_String(&paint, data->forecast_worth, 187, 40, 105, 35, sizeConfig[0][conf->font_size]);
+    Display_Muti_Line_String(&paint, data->now_limit, 105, 75, 80, 20, sizeConfig[2][conf->font_size]);
+    Display_Muti_Line_String(&paint, data->forecast_limit, 217, 75, 80, 20, sizeConfig[2][conf->font_size]);    
+    Display_Muti_Line_String(&paint, data->now_datetime, 73, 95, 110, 30, sizeConfig[1][conf->font_size]);
+    Display_Muti_Line_String(&paint, data->forecast_datetime, 185, 95, 110, 30, sizeConfig[1][conf->font_size]);
+
+    EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, epd.width, epd.height);
     EPD_DisplayFrame(&epd);
-    EPD_SetFrameMemory(&epd, IMAGE_FUND_DATA, 0, 0, epd.width, epd.height);
+    EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, epd.width, epd.height);
     EPD_DisplayFrame(&epd);
 }
 
@@ -154,6 +239,22 @@ void ICACHE_FLASH_ATTR Display_Muti_Line_String(Paint* myPaint, const char* text
     /* display last line */
     str[i] = '\0';
     Paint_DrawStringAt(myPaint, x, y+lineNum*font->Height, str, font, DEBUG ? UNCOLORED : COLORED);
+}
+
+void ICACHE_FLASH_ATTR Display_HorizontalLine(Paint* paint, int x, int y, int line_width, int size)
+{
+    int i;
+    for (i = 0; i < size; i++) {
+       Paint_DrawHorizontalLine(paint, x, y+i, line_width, COLORED);     
+    }
+}
+
+void ICACHE_FLASH_ATTR Display_VerticalLine(Paint* paint, int x, int y, int line_height, int size)
+{
+    int i;
+    for (i = 0; i < size; i++) {
+       Paint_DrawVerticalLine(paint, x+i, y, line_height, COLORED);     
+    }
 }
 
 void ICACHE_FLASH_ATTR Display_Reverse(Paint* paint) 
