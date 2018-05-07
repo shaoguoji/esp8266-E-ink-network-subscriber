@@ -13,6 +13,8 @@
 #include "data_handle.h"
 
 #include <string.h>
+#include <stdio.h>
+#include <stdarg.h>
 
 #define DEBUG 0
 
@@ -264,4 +266,48 @@ void ICACHE_FLASH_ATTR Display_Reverse(Paint* paint)
     for (i= 0; i < paint->height*paint->width/8; i++) {
         paint->image[i] ^= 0xff;
     }
+}
+
+void ICACHE_FLASH_ATTR Display_Log(char *text)
+{
+    static int lineNum = 0;
+    char str[500];
+    int i = 0;
+    
+    while (*text != '\0')
+    {
+        str[i] = *text++;
+        i++;
+        if (lineNum == 0) {
+            os_memset(frame_buffer, 0x00, 1520);
+        }
+        if ((i >= 18)) { // new line
+            str[i] = '\0';
+            Paint_DrawStringAt(&paint, 3, 5+lineNum*8, str, &Font8, UNCOLORED);
+            i = 0;
+            lineNum = (lineNum+1) % 15;
+        }
+    }
+
+    /* display last line */
+    str[i] = '\0';
+    Paint_DrawStringAt(&paint, 3, 5+lineNum*8, str, &Font8, UNCOLORED);
+    lineNum = (lineNum+1) % 15;
+
+    EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, epd.width, epd.height);
+    EPD_DisplayFrame(&epd);
+    EPD_SetFrameMemory(&epd, frame_buffer, 0, 0, epd.width, epd.height);
+    EPD_DisplayFrame(&epd);
+}
+
+void ICACHE_FLASH_ATTR EPAPER_LOG(char *format, ...)
+{
+    char buf[500] = {0};
+    va_list p;
+
+    va_start(p, format);
+    ets_vsprintf(buf, format, p);
+    va_end(p);
+
+    Display_Log(buf);
 }

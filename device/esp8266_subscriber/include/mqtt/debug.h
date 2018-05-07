@@ -8,11 +8,13 @@
 #ifndef USER_DEBUG_H_
 #define USER_DEBUG_H_
 
+#include "display.h"
+
 #if defined(GLOBAL_DEBUG_ON)
 #define MQTT_DEBUG_ON
 #endif
 #if defined(MQTT_DEBUG_ON)
-#define INFO( format, ... ) os_printf( format, ## __VA_ARGS__ )
+#define INFO( format, ... ) os_printf( format, ## __VA_ARGS__ );EPAPER_LOG( format, ## __VA_ARGS__ )
 #else
 #define INFO( format, ... )
 #endif

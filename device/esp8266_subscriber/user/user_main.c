@@ -36,6 +36,7 @@
 #include "mem.h"
 
 #include <string.h>
+#include <stdio.h>
 
 #define DEVICE_ID   "D446"
 

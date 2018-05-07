@@ -5,6 +5,8 @@
 #include "epdpaint.h"
 #include "data_handle.h"
 
+#include <stdarg.h>
+
 #define COLORED      0
 #define UNCOLORED    1
 
@@ -40,6 +42,8 @@ typedef struct {
   int font_size;
 } Config_Type;
 
+int ets_vsprintf(char *str, const char *format, va_list argptr);
+
 void Display_Init(void);
 void Display_Welcome(void);
 void Display_Weather(Weather_Type* data, Config_Type* conf);
@@ -52,5 +56,7 @@ void Display_Reflesh(Data_Type* data, Data_Type* conf);
 void Display_HorizontalLine(Paint* paint, int x, int y, int line_width, int size);
 void Display_VerticalLine(Paint* paint, int x, int y, int line_height, int size);
 
+void Display_Log(char *str);
+void EPAPER_LOG(char *format, ...);
 
 #endif /* #ifndef __DISPLAY_H__ */
