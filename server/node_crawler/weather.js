@@ -19,11 +19,11 @@ response.on('end', function () {
   content = JSON.parse(body.toString());
 
   var cityPinyin = pinyin(city, {style: 'normal'}).toString().replace(/[^a-zA-Z]+/g,"").replace(/( |^)[a-z]/g, (L) => L.toUpperCase());     
-  var todayTemp =  content.data.forecast[0].high.replace(/[^0-9.]+/g,"") + '-' 
-                + content.data.forecast[0].low.replace(/[^0-9.]+/g,"") + 'C';
+  var todayTemp =  content.data.forecast[0].low.replace(/[^0-9.]+/g,"") + '-' 
+                + content.data.forecast[0].high.replace(/[^0-9.]+/g,"") + 'C';
   var todayPm25 = 'PM2.5: ' + content.data.pm25.toString();
-  var tomorrowTemp = content.data.forecast[1].high.replace(/[^0-9.]+/g,"") + '-' 
-                + content.data.forecast[1].low.replace(/[^0-9.]+/g,"") + 'C';
+  var tomorrowTemp = content.data.forecast[1].low.replace(/[^0-9.]+/g,"") + '-' 
+                + content.data.forecast[1].high.replace(/[^0-9.]+/g,"") + 'C';
   var tomorrowAqi = 'aqi: ' + content.data.forecast[1].aqi.toString();
 
   var data = {
@@ -38,6 +38,6 @@ response.on('end', function () {
     }
   }
 
-  console.log(JSON.stringify(data).replace(/[\"]+/g, "\\\""));
+  console.log(JSON.stringify(data));
 });
 });

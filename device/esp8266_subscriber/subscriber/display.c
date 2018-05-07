@@ -65,7 +65,8 @@ void ICACHE_FLASH_ATTR Display_Weather(Weather_Type* data, Config_Type* conf)
     /* fontsize table */
     sFONT* sizeConfig[][3] = {
         {&Font12, &Font16, &Font24},   // fontsize of city
-        {&Font8, &Font12, &Font16}     // fontsize of date, tempertrue and air
+        {&Font8, &Font12, &Font16},    // fontsize of tempertrue and air
+        {&Font12, &Font16, &Font16}    // fontsize data and title
     }; 
 
     Paint_Clear(&paint, UNCOLORED);
@@ -85,12 +86,12 @@ void ICACHE_FLASH_ATTR Display_Weather(Weather_Type* data, Config_Type* conf)
     Display_VerticalLine(&paint, 72, 1, 128, 2);
     Display_VerticalLine(&paint, 183, 38, 91, 2);
     /* title text */
-    Display_Muti_Line_String(&paint, "TEMP", 5, 67, 65, 25, sizeConfig[1][conf->font_size]);
-    Display_Muti_Line_String(&paint, "AIR", 5, 98, 65, 25, sizeConfig[1][conf->font_size]);
+    Display_Muti_Line_String(&paint, "TEMP", 5, 67, 65, 25, sizeConfig[2][conf->font_size]);
+    Display_Muti_Line_String(&paint, "AIR", 5, 98, 65, 25, sizeConfig[2][conf->font_size]);
     /* data text */
     Display_Muti_Line_String(&paint, data->city, 76, 6, 210, 30, sizeConfig[0][conf->font_size]);
-    Display_Muti_Line_String(&paint, data->today_date, 76, 40, 105, 25, sizeConfig[1][conf->font_size]);
-    Display_Muti_Line_String(&paint, data->tomorrow_date, 187, 40, 102, 25, sizeConfig[1][conf->font_size]);
+    Display_Muti_Line_String(&paint, data->today_date, 76, 40, 105, 25, sizeConfig[2][conf->font_size]);
+    Display_Muti_Line_String(&paint, data->tomorrow_date, 187, 40, 102, 25, sizeConfig[2][conf->font_size]);
     Display_Muti_Line_String(&paint, data->today_temp, 76, 68, 105, 25, sizeConfig[1][conf->font_size]);
     Display_Muti_Line_String(&paint, data->tomorrow_temp, 187, 68, 102, 25, sizeConfig[1][conf->font_size]);
     Display_Muti_Line_String(&paint, data->today_air, 76, 98, 105, 25, sizeConfig[1][conf->font_size]);

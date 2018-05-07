@@ -34,6 +34,6 @@ https.get(options, function (response) {
         }
       }
 
-     console.log(JSON.stringify(data).replace(/[\"]+/g, "\\\""));
+     console.log(JSON.stringify(data));
     });
 });

@@ -29,9 +29,86 @@
 #include "display.h"
 #include "data_handle.h"
 
+#include "mqtt.h"
+#include "wifi.h"
+#include "config.h"
+#include "debug.h"
+#include "mem.h"
+
 #include <string.h>
 
 #define DEVICE_ID   "D446"
+
+MQTT_Client mqttClient;
+Data_Type sub_data;
+Data_Type sub_config;
+
+void wifiConnectCb(uint8_t status)
+{
+	if(status == STATION_GOT_IP){
+		MQTT_Connect(&mqttClient);
+	} else {
+		MQTT_Disconnect(&mqttClient);
+	}
+}
+void mqttConnectedCb(uint32_t *args)
+{
+	MQTT_Client* client = (MQTT_Client*)args;
+	INFO("MQTT: Connected\r\n");
+	MQTT_Subscribe(client, "data", 2);
+	MQTT_Subscribe(client, "config", 2);
+	//MQTT_Subscribe(client, "/mqtt/topic/2", 2);
+
+    char *data_text = "{\"device_id\":\"D446\",\"data_type\":2,\"data_content\":{\"repo_name\":\"----------\",\"watch\":\"---\",\"star\":\"---\",\"fork\":\"---\"}}";
+    char *config_text = "{\"device_id\":\"D446\",\"data_type\":0,\"data_content\":{\"style\":\"light\",\"font_size\":1}}";
+
+	MQTT_Publish(client, "data", data_text, strlen(data_text), 0, 0);
+    MQTT_Publish(client, "config", config_text, strlen(config_text), 0, 0);
+	//MQTT_Publish(client, "/mqtt/topic/1", "hello1", 6, 1, 0);
+	//MQTT_Publish(client, "/mqtt/topic/2", "hello2", 6, 2, 0);
+
+}
+
+void mqttDisconnectedCb(uint32_t *args)
+{
+	MQTT_Client* client = (MQTT_Client*)args;
+	INFO("MQTT: Disconnected\r\n");
+}
+
+void mqttPublishedCb(uint32_t *args)
+{
+	MQTT_Client* client = (MQTT_Client*)args;
+	INFO("MQTT: Published\r\n");
+}
+
+void mqttDataCb(uint32_t *args, const char* topic, uint32_t topic_len, const char *data, uint32_t data_len)
+{
+	char *topicBuf = (char*)os_zalloc(topic_len+1),
+			*dataBuf = (char*)os_zalloc(data_len+1);
+
+	MQTT_Client* client = (MQTT_Client*)args;
+
+	os_memcpy(topicBuf, topic, topic_len);
+	topicBuf[topic_len] = 0;
+
+	os_memcpy(dataBuf, data, data_len);
+	dataBuf[data_len] = 0;
+
+	INFO("Receive topic: %s, data: %s \r\n", topicBuf, dataBuf);
+
+    if (strcmp(topicBuf, "data") == 0) {
+        data_parse(dataBuf, &sub_data);
+    } else if (strcmp(topicBuf, "config") == 0) {
+        config_parse(dataBuf, &sub_config);
+    }
+    
+    if ((strcmp(sub_data.device_id, DEVICE_ID) == 0) && (sub_data.data_content != NULL) && (sub_config.data_content != NULL)) {
+        Display_Reflesh(&sub_data, &sub_config);
+    }
+	
+	os_free(topicBuf);
+	os_free(dataBuf);
+}
 
 /******************************************************************************
  * FunctionName : user_rf_cal_sector_set
@@ -107,9 +184,6 @@ user_rf_pre_init(void)
 {
 }
 
-Data_Type data;
-Data_Type config;
-
 /******************************************************************************
  * FunctionName : user_init
  * Description  : entry of user application, init user function here
@@ -119,12 +193,26 @@ Data_Type config;
 void ICACHE_FLASH_ATTR
 user_init(void)
 {
-
     os_printf("SDK version:%s\n", system_get_sdk_version());
     
     Display_Init();
+    Display_Welcome();
 
-    // Display_Welcome();
+	CFG_Load();
+
+	MQTT_InitConnection(&mqttClient, sysCfg.mqtt_host, sysCfg.mqtt_port, sysCfg.security);
+	MQTT_InitClient(&mqttClient, sysCfg.device_id, sysCfg.mqtt_user, sysCfg.mqtt_pass, sysCfg.mqtt_keepalive, 1);
+
+	MQTT_InitLWT(&mqttClient, "/lwt", "offline", 0, 0);
+	MQTT_OnConnected(&mqttClient, mqttConnectedCb);
+	MQTT_OnDisconnected(&mqttClient, mqttDisconnectedCb);
+	MQTT_OnPublished(&mqttClient, mqttPublishedCb);
+	MQTT_OnData(&mqttClient, mqttDataCb);
+
+	WIFI_Connect(sysCfg.sta_ssid, sysCfg.sta_pwd, wifiConnectCb);
+
+	INFO("\r\nSystem started ...\r\n");
+
     // EPD_DelayMs(&epd, 2000);
     // Display_Weather();
     // EPD_DelayMs(&epd, 2000);
@@ -132,37 +220,35 @@ user_init(void)
     // EPD_DelayMs(&epd, 2000);
     // Display_Fund();
     
-    char *data_text = "";
-    //char *data_text = "{\"device_id\":\"D446\",\"data_type\":2,\"data_content\":{\"repo_name\":\"alibaba/AliOS-Things\",\"watch\":\"222\",\"star\":\"1147\",\"fork\":\"410\"}}";
-    //char *data_text = "";
-    char *config_text = "{\"device_id\":\"D446\",\"data_type\":0,\"data_content\":{\"style\":\"light\",\"font_size\":1}}";
+    // char *data_text = "";
+    // //char *data_text = "{\"device_id\":\"D446\",\"data_type\":2,\"data_content\":{\"repo_name\":\"alibaba/AliOS-Things\",\"watch\":\"222\",\"star\":\"1147\",\"fork\":\"410\"}}";
+    // //char *data_text = "";
+    // char *config_text = "{\"device_id\":\"D446\",\"data_type\":0,\"data_content\":{\"style\":\"light\",\"font_size\":1}}";
 
-    Weather_Type wdata = {
-        "Guangzhou", 
-        "20180504", "21.0-25.0C", "PM25:63.0", 
-        "TOMORROW", "22.0-27.0C", "aqi:77.0"
-    };
+    // Weather_Type wdata = {
+    //     "Guangzhou", 
+    //     "20180504", "21.0-25.0C", "PM25:63.0", 
+    //     "TOMORROW", "22.0-27.0C", "aqi:77.0"
+    // };
 
-    Github_Type gdata = {
-        "alibaba/AliOS-Things", 
-        "222", "1147", "410"
-    };
+    // Github_Type gdata = {
+    //     "alibaba/AliOS-Things", 
+    //     "222", "1147", "410"
+    // };
 
-    Fund_Type fdata = {
-        "164906", 
-        "1.3350", "-1.84%", "2018-04-25",
-        "1.3454", "+0.78%", "2018-04-27"
-    };
+    // Fund_Type fdata = {
+    //     "164906", 
+    //     "1.3350", "-1.84%", "2018-04-25",
+    //     "1.3454", "+0.78%", "2018-04-27"
+    // };
 
+    // data_parse(data_text, &data);
+    // config_parse(config_text, &config);
 
-    data_parse(data_text, &data);
-    config_parse(config_text, &config);
-
-    Display_Welcome();
-    Display_Weather(&wdata, (Config_Type*)config.data_content);
-    Display_Fund(&fdata, (Config_Type*)config.data_content);
-    Display_Github(&gdata, (Config_Type*)config.data_content);
-
+    // Display_Welcome();
+    // Display_Weather(&wdata, (Config_Type*)config.data_content);
+    // Display_Fund(&fdata, (Config_Type*)config.data_content);
+    // Display_Github(&gdata, (Config_Type*)config.data_content);
 
     // if (strcmp(data.device_id, DEVICE_ID) == 0) {
     //     Display_Reflesh(&data, &config);

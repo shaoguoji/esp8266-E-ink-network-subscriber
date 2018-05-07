@@ -42,6 +42,6 @@ response.on('end', function () {
     }
   }
 
-console.log(JSON.stringify(data).replace(/[\"]+/g, "\\\""));
+  console.log(JSON.stringify(data));
 });
 });
