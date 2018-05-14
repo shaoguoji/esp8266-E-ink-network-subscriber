@@ -1,0 +1,45 @@
+<!--index.wxml-->
+<view class="container">
+<view class="weui-panel">
+<view class="weui-cells__title">未登录</view>
+  <view class="userinfo">
+    <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="weui-btn" type="primary" plain="true"> 点击登录 </button>
+    <block wx:else>
+      <image bindtap="bindViewTap" class="userinfo-avatar" src="{{userInfo.avatarUrl}}" background-size="cover"></image>
+      <text class="userinfo-nickname">{{userInfo.nickName}}</text>
+    </block>
+  </view>
+</view>
+  
+  <view class="userDevice">
+    <view class="weui-cells__title">我的设备</view>
+    <view class="weui-cells weui-cells_after-title">
+            <navigator url="../deviceConfig/deviceConfig" class="weui-cell weui-cell_access" hover-class="weui-cell_active" open-type="switchTab">
+                <view class="weui-cell__bd">国际的NodeMCU</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access">配置</view>
+            </navigator>
+    </view>
+    <view class="addDeviceInfo">
+      <view class="weui-cells__title">设备信息</view>
+          <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell weui-cell_input">
+              <view class="weui-cell__hd">
+                  <view class="weui-label">设备ID</view>
+              </view>
+              <view class="weui-cell__bd">
+                  <input class="weui-input" placeholder="请输入设备唯一ID"/>
+              </view>
+            </view>
+            <view class="weui-cell weui-cell_input">
+              <view class="weui-cell__hd">
+                  <view class="weui-label">设备名称</view>
+              </view>
+              <view class="weui-cell__bd">
+                  <input class="weui-input" placeholder="请输入设备显示名称"/>
+              </view>
+            </view>
+          </view>
+    </view>
+    <button class="weui-btn" type="primary">添加新设备</button>
+  </view>
+</view>

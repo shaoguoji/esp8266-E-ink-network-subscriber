@@ -1,0 +1,41 @@
+{
+  "pages":[
+    "pages/index/index",
+    "pages/dataSource/dataSource",
+    "pages/deviceConfig/deviceConfig",
+    "pages/dataDetail/dataDetail",
+    "pages/dataConfig/dataConfig"
+  ],
+  "window":{
+    "backgroundTextStyle":"light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "小墨订阅器",
+    "navigationBarTextStyle":"black"
+  },
+  "tabBar": {
+    "position":"bottom",
+    "backgroundColor": "#fff",
+    "color": "#a7a7a7",
+    "selectedColor": "#1FA400",
+    "list": [
+      {
+        "iconPath": "./images/icon_index.png",
+        "selectedIconPath": "./images/icon_index_selected.png",
+        "pagePath": "pages/index/index",
+        "text": "主页"
+      },
+      {
+        "iconPath": "./images/icon_dataSource.png",
+        "selectedIconPath": "./images/icon_dataSource_selected.png",
+        "pagePath": "pages/dataSource/dataSource",
+        "text": "数据源"
+      },
+      {
+        "iconPath": "./images/icon_deviceConfig.png",
+        "selectedIconPath": "./images/icon_deviceConfig_selected.png",
+        "pagePath": "pages/deviceConfig/deviceConfig",
+        "text": "设备配置"
+      }
+    ]
+  }
+}

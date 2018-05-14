@@ -1,0 +1,21 @@
+<view class="page">
+  <view class="weui-cells__title">天气预报参数配置</view>
+          <view class="weui-cells weui-cells_after-title">
+            <view class="weui-cell weui-cell_input">
+              <view class="weui-cell__hd">
+                  <view class="weui-label">城市</view>
+              </view>
+              <view class="weui-cell__bd">
+                  <input class="weui-input" placeholder="请输入城市或地区名"/>
+              </view>
+            </view>
+          </view>
+  <view class="page__hd">
+        <view class="weui-article__h2">数据更新间隔</view>
+        <view class="page__desc">滑动设置更新间隔（单位：s）</view>
+    </view>
+        <view class="page__bd page__bd_spacing">
+        <slider show-value value="50"/>
+    </view>
+    <button class="weui-btn" type="primary">确认保存</button>
+</view>

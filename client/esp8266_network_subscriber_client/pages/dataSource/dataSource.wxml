@@ -1,0 +1,19 @@
+<view class="page">
+    <view class="page__hd">
+
+    </view>
+    <view class="page__bd page__bd_spacing">
+        <view class="kind-list">
+          <block wx:for="{{list}}" wx:key="id">
+            <navigator url="../dataDetail/dataDetail" open-type="navigateTo">
+              <view class="kind-list__item">
+                <view id="{{item.id}}" class="weui-flex kind-list__item-hd" bindtap="kindToggle">
+                <view class="weui-flex__item">{{item.name}}</view>
+                <image class="kind-list__img" src="../../images/icon_nav_{{item.id}}.png"></image>
+                  </view>
+              </view>
+            </navigator>
+          </block>
+        </view>
+    </view>
+</view>

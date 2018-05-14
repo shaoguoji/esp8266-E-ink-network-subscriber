@@ -1,0 +1,58 @@
+{
+	"description": "项目配置文件。",
+	"setting": {
+		"urlCheck": true,
+		"es6": true,
+		"postcss": true,
+		"minified": true,
+		"newFeature": true
+	},
+	"compileType": "miniprogram",
+	"libVersion": "1.9.91",
+	"appid": "wx598f98d9717f234e",
+	"projectname": "esp8266_network_subscriber_client",
+	"isGameTourist": false,
+	"condition": {
+		"search": {
+			"current": -1,
+			"list": []
+		},
+		"conversation": {
+			"current": -1,
+			"list": []
+		},
+		"game": {
+			"currentL": -1,
+			"list": []
+		},
+		"miniprogram": {
+			"current": -1,
+			"list": [
+				{
+					"id": -1,
+					"name": "dataSource",
+					"pathName": "pages/dataSource/dataSource",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "deviceConfig",
+					"pathName": "pages/deviceConfig/deviceConfig",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "dataDetail",
+					"pathName": "pages/dataDetail/dataDetail",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "dataConfig",
+					"pathName": "pages/dataConfig/dataConfig",
+					"query": ""
+				}
+			]
+		}
+	}
+}

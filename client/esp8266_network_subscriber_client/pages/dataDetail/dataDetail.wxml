@@ -1,0 +1,36 @@
+<view class="page">
+    <view class="page__hd">
+
+      <view class="weui-panel weui-panel_access">
+        <view class="weui-panel__hd">天气预报</view>
+        <view class="weui-panel__bd">
+            <view class="weui-media-box weui-media-box_text">
+              <view class="weui-media-box__title weui-media-box__title_in-text">数据简介</view>
+              <view class="weui-media-box__desc">类型：API请求</view>
+              <view class="weui-media-box__desc">来源：https://www.sojson.com</view>
+              <view class="weui-media-box__desc">说明：获取当天及次日天气信息，包括温度、空气指标数据。</view>
+            </view>
+            <view class="weui-media-box weui-media-box_text">
+              <view class="weui-media-box__title weui-media-box__title_in-text">配置参数</view>
+              <view class="weui-media-box__desc">1. 城市：例 “广州”</view>
+              <view class="weui-media-box__desc">2. 更新间隔：例 “1h”</view>
+            </view>
+            <view class="weui-media-box weui-media-box_text">
+              <view class="weui-media-box__title weui-media-box__title_in-text">显示效果</view>
+              <view class="weui-media-box__desc">
+                <image class="weui-article__img" src="../../images/pic_dataDetail_weather.png" mode="aspectFit" style="width: 100%" />
+              </view>
+            </view>
+        </view>
+        <view class="weui-panel__ft">
+            <view class="weui-cell weui-cell_access weui-cell_link">
+                <view class="weui-cell__bd">查看更多</view>
+                <view class="weui-cell__ft weui-cell__ft_in-access"></view>
+            </view>
+        </view>
+      </view>
+      
+      <button class="weui-btn" type="primary">立即添加</button>
+      <button class="weui-btn" type="default" bindtap="dataConfig">参数配置</button>
+    </view>
+</view>

@@ -1,0 +1,62 @@
+<!--pages/dataConfig/dataConfig.wxml-->
+<view class="page" xmlns:wx="http://www.w3.org/1999/xhtml">
+  <view class="page__bd">
+    <view class="weui-cells__title">设备名称</view>
+    <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_input">
+            <view class="weui-cell__bd">
+                <input class="weui-input" placeholder="请输入设备名称" />
+            </view>
+        </view>
+    </view>
+    <view class="weui-cells__title">数据显示开关</view>
+    <view class="weui-cells weui-cells_after-title">
+        <view class="weui-cell weui-cell_switch">
+            <view class="weui-cell__bd">天气预报</view>
+            <view class="weui-cell__ft">
+                <switch checked />
+            </view>
+        </view>
+        <view class="weui-cell weui-cell_switch">
+            <view class="weui-cell__bd">Github仓库</view>
+            <view class="weui-cell__ft">
+                <switch checked />
+            </view>
+        </view>
+        <view class="weui-cell weui-cell_switch">
+            <view class="weui-cell__bd">基金价格</view>
+            <view class="weui-cell__ft">
+                <switch checked />
+            </view>
+        </view>
+    </view>
+    <view class="weui-cells__title">显示风格</view>
+    <view class="weui-cells weui-cells_after-title">
+      <radio-group bindchange="styleChange">
+          <label class="weui-cell weui-check__label" wx:for="{{styleItems}}" wx:key="value">
+              <radio class="weui-check" value="{{item.value}}" checked="{{item.checked}}"/>
+
+              <view class="weui-cell__bd">{{item.name}}</view>
+              <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{item.checked}}">
+                  <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
+              </view>
+          </label>
+      </radio-group>
+    </view>
+    <view class="weui-cells__title">字体大小</view>
+    <view class="weui-cells weui-cells_after-title">
+      <radio-group bindchange="fontsizeChange">
+          <label class="weui-cell weui-check__label" wx:for="{{fontsizeItems}}" wx:key="value">
+              <radio class="weui-check" value="{{item.value}}" checked="{{item.checked}}"/>
+
+              <view class="weui-cell__bd">{{item.name}}</view>
+              <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{item.checked}}">
+                  <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
+              </view>
+          </label>
+      </radio-group>
+    </view>
+    <button class="weui-btn" type="warn">删除设备</button>
+  </view>
+</view>
+    
