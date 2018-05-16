@@ -95,7 +95,7 @@ void mqttDataCb(uint32_t *args, const char* topic, uint32_t topic_len, const cha
 	os_memcpy(dataBuf, data, data_len);
 	dataBuf[data_len] = 0;
 
-	INFO("Receive topic: %s, data: %s \r\n", topicBuf, dataBuf);
+	// INFO("Receive topic: %s, data: %s \r\n", topicBuf, dataBuf);
 
     if (strcmp(topicBuf, "data") == 0) {
         data_parse(dataBuf, &sub_data);
@@ -162,24 +162,6 @@ user_rf_cal_sector_set(void)
     return rf_cal_sec;
 }
 
-void ICACHE_FLASH_ATTR time_tick(void)
-{
-    // time_now_s = (system_get_time()/1000 - time_start_ms) / 1000;
-    // time_string[0] = time_now_s / 60 / 10 + '0';
-    // time_string[1] = time_now_s / 60 % 10 + '0';
-    // time_string[3] = time_now_s % 60 / 10 + '0';
-    // time_string[4] = time_now_s % 60 % 10 + '0';
-
-    // Paint_SetWidth(&paint, 32);
-    // Paint_SetHeight(&paint, 96);
-    // Paint_SetRotate(&paint, ROTATE_90);
-
-    // Paint_Clear(&paint, UNCOLORED);
-    // Paint_DrawStringAt(&paint, 0, 4, time_string, &Font12, COLORED);
-    // EPD_SetFrameMemory(&epd, frame_buffer, 80, 72, Paint_GetWidth(&paint), Paint_GetHeight(&paint));
-    // EPD_DisplayFrame(&epd);
-}
-
 void ICACHE_FLASH_ATTR
 user_rf_pre_init(void)
 {
@@ -213,52 +195,5 @@ user_init(void)
 	WIFI_Connect(sysCfg.sta_ssid, sysCfg.sta_pwd, wifiConnectCb);
 
 	INFO("\r\nSystem started ...\r\n");
-
-    // EPD_DelayMs(&epd, 2000);
-    // Display_Weather();
-    // EPD_DelayMs(&epd, 2000);
-    // Display_Github(&githubData);
-    // EPD_DelayMs(&epd, 2000);
-    // Display_Fund();
-    
-    // char *data_text = "";
-    // //char *data_text = "{\"device_id\":\"D446\",\"data_type\":2,\"data_content\":{\"repo_name\":\"alibaba/AliOS-Things\",\"watch\":\"222\",\"star\":\"1147\",\"fork\":\"410\"}}";
-    // //char *data_text = "";
-    // char *config_text = "{\"device_id\":\"D446\",\"data_type\":0,\"data_content\":{\"style\":\"light\",\"font_size\":1}}";
-
-    // Weather_Type wdata = {
-    //     "Guangzhou", 
-    //     "20180504", "21.0-25.0C", "PM25:63.0", 
-    //     "TOMORROW", "22.0-27.0C", "aqi:77.0"
-    // };
-
-    // Github_Type gdata = {
-    //     "alibaba/AliOS-Things", 
-    //     "222", "1147", "410"
-    // };
-
-    // Fund_Type fdata = {
-    //     "164906", 
-    //     "1.3350", "-1.84%", "2018-04-25",
-    //     "1.3454", "+0.78%", "2018-04-27"
-    // };
-
-    // data_parse(data_text, &data);
-    // config_parse(config_text, &config);
-
-    // Display_Welcome();
-    // Display_Weather(&wdata, (Config_Type*)config.data_content);
-    // Display_Fund(&fdata, (Config_Type*)config.data_content);
-    // Display_Github(&gdata, (Config_Type*)config.data_content);
-
-    // if (strcmp(data.device_id, DEVICE_ID) == 0) {
-    //     Display_Reflesh(&data, &config);
-    // }
-    
-    // time_start_ms = system_get_time()/1000;
-
-    // os_timer_disarm(&count_timer);
-    // os_timer_setfn(&count_timer, (os_timer_func_t *)time_tick, NULL);
-    // os_timer_arm(&count_timer, 500, 1);
 }
 

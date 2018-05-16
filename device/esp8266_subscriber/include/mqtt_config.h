@@ -16,8 +16,10 @@
 #define MQTT_USER			"admin"
 #define MQTT_PASS			"password"
 
-#define STA_SSID "Nokia6"
-#define STA_PASS "88888888"
+// #define STA_SSID "Nokia6"
+// #define STA_PASS "88888888"
+#define STA_SSID "openBlack"
+#define STA_PASS "66666666"
 #define STA_TYPE AUTH_WPA2_PSK
 
 #define MQTT_RECONNECT_TIMEOUT 	5	/*second*/
