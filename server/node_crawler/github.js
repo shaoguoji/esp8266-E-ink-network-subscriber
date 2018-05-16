@@ -26,8 +26,8 @@ https.get(options, function (response) {
       var data = {
         'device_id' : device_id,
         'data_type' : 2,
-        'data_content' : {
-          'repo_name' : content.full_name.toString(),
+        'data_cotent' : {
+          'repo' : content.full_name.toString(),
           'watch' : content.subscribers_count.toString(),
           'star' : content.stargazers_count.toString(),
           'fork' : content.forks.toString(),

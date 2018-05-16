@@ -1,8 +1,8 @@
 {
-  "name": "node_crawler",
+  "name": "crawler_mqtt_client",
   "version": "1.0.0",
-  "description": "crawl data test",
-  "main": "weather.js",
+  "description": "crawl data",
+  "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
