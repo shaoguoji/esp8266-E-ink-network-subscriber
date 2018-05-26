@@ -1,7 +1,9 @@
 <!--index.wxml-->
 <view class="container">
 <view class="weui-panel">
-<view class="weui-cells__title">未登录</view>
+<view class="weui-toptips weui-toptips_warn" wx:if="{{showTopTips}}">错误提示：输入内容不能为空</view>
+<view wx:if="{{!hasUserInfo && canIUse}}" class="weui-cells__title">未登录</view>
+<view wx:else class="weui-cells__title">已登录</view>
   <view class="userinfo">
     <button wx:if="{{!hasUserInfo && canIUse}}" open-type="getUserInfo" bindgetuserinfo="getUserInfo" class="weui-btn" type="primary" plain="true"> 点击登录 </button>
     <block wx:else>
@@ -11,15 +13,24 @@
   </view>
 </view>
   
-  <view class="userDevice">
+  <view wx:if="{{hasUserInfo && canIUse}}" class="userDevice">
     <view class="weui-cells__title">我的设备</view>
     <view class="weui-cells weui-cells_after-title">
-            <navigator url="../deviceConfig/deviceConfig" class="weui-cell weui-cell_access" hover-class="weui-cell_active" open-type="switchTab">
-                <view class="weui-cell__bd">国际的NodeMCU</view>
-                <view class="weui-cell__ft weui-cell__ft_in-access">配置</view>
-            </navigator>
+      <block wx:if="{{devices.length == 0}}">
+        <view class="weui-cell">暂无设备</view>
+      </block>
+      <radio-group bindchange="deviceChange">
+          <label class="weui-cell weui-check__label" wx:for="{{devices}}" wx:key="value">
+              <radio class="weui-check" value="{{item.value}}" checked="{{item.checked}}"/>
+
+              <view class="weui-cell__bd">{{item.device_name}}</view>
+              <view class="weui-cell__ft weui-cell__ft_in-radio" wx:if="{{item.checked}}">
+                  <icon class="weui-icon-radio" type="success_no_circle" size="16"></icon>
+              </view>
+          </label>
+      </radio-group>
     </view>
-    <view class="addDeviceInfo">
+    <view wx:if="{{addDeviceToogle}}" class="addDeviceInfo">
       <view class="weui-cells__title">设备信息</view>
           <view class="weui-cells weui-cells_after-title">
             <view class="weui-cell weui-cell_input">
@@ -27,7 +38,7 @@
                   <view class="weui-label">设备ID</view>
               </view>
               <view class="weui-cell__bd">
-                  <input class="weui-input" placeholder="请输入设备唯一ID"/>
+                  <input class="weui-input" bindinput="bindDeivdeIdInput" placeholder="请输入设备唯一ID"/>
               </view>
             </view>
             <view class="weui-cell weui-cell_input">
@@ -35,11 +46,11 @@
                   <view class="weui-label">设备名称</view>
               </view>
               <view class="weui-cell__bd">
-                  <input class="weui-input" placeholder="请输入设备显示名称"/>
+                  <input class="weui-input" bindinput="bindDeivdeNameInput" placeholder="请输入设备显示名称"/>
               </view>
             </view>
           </view>
     </view>
-    <button class="weui-btn" type="primary">添加新设备</button>
+    <button class="weui-btn" bindtap="addDevice" type="primary">{{addDeviceToogle ? '确认添加' : '添加新设备'}}</button>
   </view>
 </view>

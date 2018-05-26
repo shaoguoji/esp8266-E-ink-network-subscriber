@@ -1,10 +1,15 @@
 //app.js
 App({
+  globalData: {
+    userInfo: null,
+    devices: wx.getStorageSync('devices') ? wx.getStorageSync('devices') : [],
+    activeDevice: wx.getStorageSync('activeDevice') ? wx.getStorageSync('activeDevice') : { device_id: '', device_name: '', sub_datas: [], device_config: {} }
+  },
   onLaunch: function () {
     // 展示本地存储能力
-    var logs = wx.getStorageSync('logs') || []
-    logs.unshift(Date.now())
-    wx.setStorageSync('logs', logs)
+    // var logs = wx.getStorageSync('logs') || []
+    // logs.unshift(Date.now())
+    // wx.setStorageSync('logs', logs)
 
     // 登录
     wx.login({
@@ -33,7 +38,4 @@ App({
       }
     })
   },
-  globalData: {
-    userInfo: null
-  }
 })
